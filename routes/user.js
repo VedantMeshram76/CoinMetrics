@@ -94,7 +94,7 @@ router.post("/register", async (req, res) => {
         return res.redirect('/users/market');
     }
     catch (err) {
-        return res.status(500).json({ error: "Internal server error" });
+         console.error("Register route error:", err); 
     }
 })
 
