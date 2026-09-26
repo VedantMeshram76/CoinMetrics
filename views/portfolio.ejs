@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - CoinMetrics</title>
+    <!-- Tailwind CSS CDN -->
+   <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#060608] text-white font-sans antialiased min-h-screen">
+    <%- include('partials/nav') -%>
+
+    <main class="max-w-7xl mx-auto my-4 sm:my-6 px-3 sm:px-6 space-y-4">
+
+        <!-- Top Header & Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <p class="text-[11px] sm:text-xs text-[#8a8a93] uppercase tracking-wider font-semibold">
+                    Total portfolio value
+                </p>
+                <div class="flex items-baseline gap-2.5 mt-1">
+                    <span class="text-2xl sm:text-3xl font-bold tracking-tight">
+                        $<%= currentLiveValue %>
+                    </span>
+                    <% const isPositiveOverall = Number(portfolioChange24hPct) >= 0; %>
+                    <span class="text-xs sm:text-sm font-semibold <%= isPositiveOverall ? 'text-[#10b981]' : 'text-[#ef4444]' %> flex items-center gap-0.5">
+                        <span><%= isPositiveOverall ? '▲' : '▼' %></span>
+                        <span><%= portfolioChange24hPct %>% (24h)</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+                <button class="bg-transparent border border-white/10 text-[#8a8a93] hover:text-white hover:border-white/20 rounded-lg px-3.5 py-2 text-xs font-medium transition-colors">
+                    USD
+                </button>
+                <form action="/users/transactions" method="GET" class="inline">
+                    <button type="submit" class="bg-[#10b981]/15 border border-[#10b981]/30 text-[#10b981] hover:bg-[#10b981]/25 rounded-lg px-3.5 py-2 text-xs font-semibold transition-colors">
+                        + Add transaction
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Portfolio Chart Container -->
+        <div class="bg-[#0d0d11] border border-white/5 rounded-2xl p-4 sm:p-5 shadow-xl">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs sm:text-sm text-[#8a8a93] font-medium">Portfolio value (30 Days)</span>
+            </div>
+            <div class="relative h-40 sm:h-52 w-full">
+                <canvas id="valueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Allocation & Performers Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            
+            <!-- Allocation Doughnut Section -->
+            <div class="lg:col-span-7 bg-[#0d0d11] border border-white/5 rounded-2xl p-4 sm:p-5 shadow-xl flex flex-col justify-between">
+                <p class="text-xs sm:text-sm text-[#8a8a93] font-medium mb-3">Allocation</p>
+                
+                <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+                    <!-- Donut Canvas Container -->
+                    <div class="w-28 h-28 sm:w-32 sm:h-32 relative shrink-0">
+                        <canvas id="allocDonut"></canvas>
+                    </div>
+
+                    <!-- Breakdown List -->
+                    <div class="w-full flex-1 text-xs space-y-2 max-h-36 overflow-y-auto no-scrollbar">
+                        <% if (allocations && allocations.length > 0) { %>
+                            <% allocations.forEach((item, index) => { %>
+                                <div class="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
+                                    <span class="flex items-center gap-2 font-medium">
+                                        <span class="w-2 h-2 rounded-full inline-block" style="background-color: <%= ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'][index % 5] %>;"></span>
+                                        <%= item.symbol %>
+                                    </span>
+                                    <span class="font-mono text-[#8a8a93]"><%= item.percentage %>%</span>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-[#8a8a93] text-xs py-4 text-center">No allocation data</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Best/Worst Performers Column -->
+            <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                
+                <!-- Best Performer -->
+                <div class="bg-[#0d0d11] border border-[#10b981]/20 rounded-2xl p-4 flex flex-col justify-between shadow-xl">
+                    <p class="text-[11px] text-[#8a8a93] uppercase font-semibold tracking-wider">Best performer</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-base font-bold">
+                            <%= (typeof bestPerformer !== 'undefined' && bestPerformer) ? bestPerformer.symbol : 'N/A' %>
+                        </span>
+                        <span class="text-sm font-semibold text-[#10b981] font-mono">
+                            <%= (typeof bestPerformer !== 'undefined' && bestPerformer) ? '▲ ' + bestPerformer.change24hPct + '%' : '0.00%' %>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Worst Performer -->
+                <div class="bg-[#0d0d11] border border-[#ef4444]/20 rounded-2xl p-4 flex flex-col justify-between shadow-xl">
+                    <p class="text-[11px] text-[#8a8a93] uppercase font-semibold tracking-wider">Worst performer</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-base font-bold">
+                            <%= (typeof worstPerformer !== 'undefined' && worstPerformer) ? worstPerformer.symbol : 'N/A' %>
+                        </span>
+                        <span class="text-sm font-semibold text-[#ef4444] font-mono">
+                            <%= (typeof worstPerformer !== 'undefined' && worstPerformer) ? '▼ ' + worstPerformer.change24hPct + '%' : '0.00%' %>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Dynamic Holdings Table Section -->
+        <div class="bg-[#0d0d11] border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-white/5">
+                <p class="text-xs sm:text-sm text-[#8a8a93] font-medium">Holdings</p>
+            </div>
+            
+            <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left text-xs font-medium min-w-[550px]">
+                    <thead>
+                        <tr class="text-[#8a8a93] uppercase text-[10px] tracking-wider border-b border-white/5">
+                            <th class="py-3 px-4 font-normal">Coin</th>
+                            <th class="py-3 px-4 font-normal text-right">Holdings</th>
+                            <th class="py-3 px-4 font-normal text-right">Price</th>
+                            <th class="py-3 px-4 font-normal text-right">24h</th>
+                            <th class="py-3 px-4 font-normal text-right">Value</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <% if (typeof holdings !== 'undefined' && holdings.length > 0) { %>
+                            <% holdings.forEach(item => { %>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="py-3.5 px-4 font-bold text-white"><%= item.symbol %></td>
+                                    <td class="py-3.5 px-4 text-right text-[#8a8a93] font-mono"><%= item.amount %></td>
+                                    <td class="py-3.5 px-4 text-right font-mono">$<%= item.currentPrice.toLocaleString() %></td>
+                                    <td class="py-3.5 px-4 text-right font-mono font-semibold <%= item.change24hPct >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]' %>">
+                                        <%= item.change24hPct >= 0 ? '▲' : '▼' %> <%= item.change24hPct.toFixed(2) %>%
+                                    </td>
+                                    <td class="py-3.5 px-4 text-right font-bold font-mono text-white">$<%= item.currentValue.toFixed(2) %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="text-center py-6 text-[#8a8a93]">No holdings found.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Chart.js Setup Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const lineLabels = <%- chartLabels %>;
+            const lineDataPoints = <%- chartDataPoints %>;
+            const allocationsData = <%- JSON.stringify(allocations || []) %>;
+
+            // Line Chart
+            const vctx = document.getElementById('valueChart').getContext('2d');
+            new Chart(vctx, {
+                type: 'line',
+                data: {
+                    labels: lineLabels,
+                    datasets: [{
+                        data: lineDataPoints,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: '#10b981',
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: '#18181b',
+                            titleColor: '#8a8a93',
+                            bodyColor: '#ffffff',
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return '$' + Number(context.raw).toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: { x: { display: false }, y: { display: false } }
+                }
+            });
+
+            // Allocation Doughnut Chart
+            const dctx = document.getElementById('allocDonut').getContext('2d');
+            new Chart(dctx, {
+                type: 'doughnut',
+                data: {
+                    labels: allocationsData.map(a => a.symbol),
+                    datasets: [{
+                        data: allocationsData.map(a => parseFloat(a.percentage)),
+                        backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+
+    <%- include('partials/footer') -%>
+</body>
+</html>

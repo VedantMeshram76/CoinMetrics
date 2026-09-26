@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About & Contact - CoinMetrics Terminal</title>
+     <link rel="stylesheet" href="/css/output.css">
+</head>
+<body class="bg-[#060608] text-white font-sans  min-h-screen">
+    <%- include('partials/nav') -%>
+
+    <main class="max-w-5xl mx-auto mt-10 space-y-16">
+        <!-- Hero Header -->
+        <section class="text-center space-y-4">
+            <span class="text-xs font-semibold text-emerald-500 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+                CoinMetrics Terminal
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Empowering Smart Crypto Decisions with <span class="text-emerald-500">Live Analytics</span>
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                CoinMetrics Terminal is designed to eliminate market noise by providing clear, real-time market streaming, data-driven portfolio management, and dynamic performance visualization.
+            </p>
+        </section>
+
+        <!-- Main Narrative / Platform Overview -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-[#0d0d11] border border-white/5 rounded-2xl p-8">
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-white">Why CoinMetrics?</h2>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                    The cryptocurrency market operates 24/7 with extreme volatility. Traditional dashboards can be cluttered, slow, or overwhelming. 
+                </p>
+                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                    CoinMetrics Terminal solves this by unifying instant price feeds, 7-day sparkline market trends, dynamic portfolio gainers/losers, and automatic percentage allocation calculations into one streamlined hub.
+                </p>
+            </div>
+            <div class="space-y-3">
+                <div class="bg-[#14141a] border border-white/5 p-4 rounded-xl">
+                    <p class="text-emerald-400 font-semibold text-sm">⚡ Sub-Second Market Syncing</p>
+                    <p class="text-xs text-gray-400 mt-1">Live market rates, market cap positioning, and 24-hour liquidity data refreshed directly via API integration.</p>
+                </div>
+                <div class="bg-[#14141a] border border-white/5 p-4 rounded-xl">
+                    <p class="text-emerald-400 font-semibold text-sm">📈 Interactive Portfolio Charts</p>
+                    <p class="text-xs text-gray-400 mt-1">Track 30-day historical net value curves and visualize asset distribution using interactive Chart.js visualizations.</p>
+                </div>
+            </div>
+        </section>
+
+   
+
+        <!-- Contact & Follow Us Section -->
+        <section class="bg-[#0d0d11] border border-white/5 rounded-2xl p-8 space-y-10">
+            <!-- Header -->
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-bold text-white">Get in Touch</h2>
+                <p class="text-xs sm:text-sm text-gray-400">Have questions, feedback, or feature requests? Reach out or connect with us online.</p>
+            </div>
+
+            <!-- Main Grid: Info + Form -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Direct Contact Details -->
+                <div class="space-y-6 md:col-span-1 border-b md:border-b-0 md:border-r border-white/5 pb-6 md:pb-0 md:pr-6">
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">Email</p>
+                        <p class="text-sm font-semibold text-white">vedantmeshram76@gmail.com</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">Location</p>
+                        <p class="text-sm font-semibold text-white">Butibori,Nagpur-441108</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider">API Status</p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-xs text-emerald-400 font-medium">CoinGecko Services Operational</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formspree Contact Form -->
+                <form action="https://formspree.io/f/xrpgdyyw" method="POST" class="space-y-4 md:col-span-2">
+                    <!-- Formspree Honeypot -->
+                    <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
+                    
+                    <!-- Email Subject Customization -->
+                    <input type="hidden" name="_subject" value="New CoinMetrics Terminal Submission">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Your Name</label>
+                            <input type="text" name="name" required placeholder="John Doe" 
+                                class="w-full bg-[#14141a] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Your Email</label>
+                            <input type="email" name="email" required placeholder="john@example.com" 
+                                class="w-full bg-[#14141a] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Subject</label>
+                        <input type="text" name="subject" required placeholder="Feature Request / Inquiry" 
+                            class="w-full bg-[#14141a] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Message</label>
+                        <textarea name="message" rows="4" required placeholder="Type your message here..." 
+                            class="w-full bg-[#14141a] border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-6 py-2.5 rounded-lg text-xs transition-colors">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Follow Us Section -->
+            <div class="pt-8 border-t border-white/5 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-base font-semibold text-white">Follow Us</h3>
+                        <p class="text-xs text-gray-400">Join our community channels for live product updates and crypto news.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <!-- X / Twitter -->
+                    <a href="https://x.com" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-center gap-3 bg-[#14141a] border border-white/5 hover:border-emerald-500/40 p-3 rounded-xl transition-all group">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                            𝕏
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-white group-hover:text-emerald-400 transition-colors">Twitter / X</p>
+                            <p class="text-[10px] text-gray-400">@CoinMetrics</p>
+                        </div>
+                    </a>
+
+                    <!-- GitHub -->
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-center gap-3 bg-[#14141a] border border-white/5 hover:border-emerald-500/40 p-3 rounded-xl transition-all group">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                            GH
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-white group-hover:text-emerald-400 transition-colors">GitHub</p>
+                            <p class="text-[10px] text-gray-400">/coinmetrics-dev</p>
+                        </div>
+                    </a>
+
+                    <!-- Discord -->
+                    <a href="https://my-portfolio-blue-alpha-63.vercel.app/" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-center gap-3 bg-[#14141a] border border-white/5 hover:border-emerald-500/40 p-3 rounded-xl transition-all group">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                            VM
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-white group-hover:text-emerald-400 transition-colors">Creator</p>
+                            <p class="text-[10px] text-gray-400">Join Community</p>
+                        </div>
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" 
+                       class="flex items-center gap-3 bg-[#14141a] border border-white/5 hover:border-emerald-500/40 p-3 rounded-xl transition-all group">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                            IN
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-white group-hover:text-emerald-400 transition-colors">LinkedIn</p>
+                            <p class="text-[10px] text-gray-400">CoinMetrics Inc.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <%- include('partials/footer') -%>
+</body>
+</html>

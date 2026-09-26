@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market - CoinMetrics</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#060608] text-white p-2 font-sans antialiased min-h-screen">
+    <%- include('partials/nav') %>
+
+        <!-- Toast: Login Success Alert -->
+        <div id="login-toast" role="alert" aria-live="polite"
+            class="fixed top-20 right-6 z-50 w-full max-w-sm bg-[#0d0d11] border border-[#10b981]/30 rounded-xl p-4 shadow-2xl flex items-center justify-between gap-3 transform transition-all duration-300 ease-out translate-x-full opacity-0 pointer-events-auto">
+            <div class="flex items-center gap-3">
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded-full bg-[#10b981]/20 text-[#10b981] shrink-0 border border-[#10b981]/30">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </span>
+                <div>
+                    <p class="m-0 text-sm font-semibold text-[#10b981] leading-tight">Logged in successfully</p>
+                    <p class="m-0 text-xs text-[#8a8a93] leading-tight mt-0.5">Welcome back to CoinMetrics</p>
+                </div>
+            </div>
+            <button onclick="dismissLoginToast(event)"
+                class="text-[#8a8a93] hover:text-white p-1 rounded-lg shrink-0 transition-colors focus:outline-none"
+                aria-label="Close toast">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Main Container -->
+        <div class="max-w-7xl mx-auto my-6 px-4 space-y-4">
+
+            <% if (!coinData || !coinData.coins) { %>
+                <div
+                    class="bg-red-500/10 border border-red-500/20 text-red-400 text-center rounded-xl p-4 text-sm font-medium">
+                    Failed to load market data. Please try again later.
+                </div>
+                <% } else { %>
+                    <!-- Main Content Table -->
+                    <div
+                        class="bg-[#0d0d11] border border-white/5 rounded-2xl overflow-hidden shadow-2xl overflow-x-auto">
+                        <table class="w-full text-left text-xs text-gray-300 min-w-[1000px]">
+                            <thead>
+                                <tr class="border-b border-white/5 text-[#8a8a93] uppercase tracking-wider text-[11px]">
+                                    <th class="w-12 text-center py-4 px-4"></th>
+                                    <th class="w-12 text-center py-4 px-2">#</th>
+                                    <th class="py-4 px-4 text-left">Coin</th>
+                                    <th class="py-4 px-4 text-right">Price</th>
+                                    <th class="py-4 px-4 text-right">1h</th>
+                                    <th class="py-4 px-4 text-right">24h</th>
+                                    <th class="py-4 px-4 text-right">7d</th>
+                                    <th class="py-4 px-4 text-right">24h Volume</th>
+                                    <th class="py-4 px-4 text-right">Market Cap</th>
+                                    <th class="w-40 text-center py-4 px-4">Last 7 Days</th>
+                                </tr>
+                            </thead>
+                            <tbody class="font-medium text-sm divide-y divide-white/5">
+                                <% coinData.coins.forEach((coin, index)=> { %>
+                                    <tr onclick="window.location.href='/users/coin_info?id=<%= coin.id %>'"
+                                        class="hover:cursor-pointer hover:bg-white/[0.02] transition-colors duration-150">
+                                        <td class="text-center py-4 px-4" onclick="event.stopPropagation()">
+                                            <button
+                                                class="text-gray-500 hover:text-yellow-500 transition-colors duration-150 focus:outline-none">
+                                                <svg width="16" height="16" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.381-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+
+                                        <td class="text-center text-gray-500 font-mono text-xs py-4 px-2">
+                                            <%= index + 1 %>
+                                        </td>
+
+                                        <td class="py-4 px-4">
+                                            <div class="flex items-center gap-3">
+                                                <img src="<%= coin.image %>" alt="<%= coin.name %>"
+                                                    class="rounded-full w-6 h-6 object-cover"
+                                                    onerror="this.src='https://assets.coingecko.com/coins/images/1/large/bitcoin.png';">
+                                                <span class="font-bold text-white">
+                                                    <%= coin.name %>
+                                                </span>
+                                                <span class="uppercase text-gray-500 font-mono text-xs">
+                                                    <%= coin.symbol %>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td class="py-4 px-4 text-right font-mono text-white">
+                                            $<%= coin.current_price ? coin.current_price.toLocaleString(undefined, {
+                                                minimumFractionDigits: 2, maximumFractionDigits: 4 }) : '0.00' %>
+                                        </td>
+
+                                        <% const pct1h=coin.price_change_percentage_1h_in_currency || 0; %>
+                                            <td
+                                                class="py-4 px-4 text-right font-mono <%= pct1h >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]' %>">
+                                                <%= pct1h>= 0 ? '▲' : '▼' %> <%= Math.abs(pct1h).toFixed(1) %>%
+                                            </td>
+
+                                            <% const pct24h=coin.price_change_percentage_24h || 0; %>
+                                                <td
+                                                    class="py-4 px-2 text-right font-mono <%= pct24h >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]' %>">
+                                                    <%= pct24h>= 0 ? '▲' : '▼' %> <%= Math.abs(pct24h).toFixed(1) %>%
+                                                </td>
+
+                                                <% const pct7d=coin.price_change_percentage_7d_in_currency || 0; %>
+                                                    <td
+                                                        class="py-4 px-3 text-right font-mono <%= pct7d >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]' %>">
+                                                        <%= pct7d>= 0 ? '▲' : '▼' %> <%= Math.abs(pct7d).toFixed(1) %>%
+                                                    </td>
+
+                                                    <td class="py-4 px-4 text-right font-mono text-gray-300">
+                                                        $<%= coin.total_volume ? coin.total_volume.toLocaleString()
+                                                            : '0' %>
+                                                    </td>
+
+                                                    <td class="py-4 px-4 text-right font-mono text-gray-300">
+                                                        $<%= coin.market_cap ? coin.market_cap.toLocaleString() : '0' %>
+                                                    </td>
+
+                                                    <td class="py-4 px-4">
+                                                        <div class="mx-auto h-10 w-36">
+                                                            <canvas id="sparkline-<%= index %>"></canvas>
+                                                        </div>
+                                                    </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+        </div>
+
+        <!-- Toast Logic -->
+        <script>
+            function dismissLoginToast(event) {
+                if (event) event.stopPropagation();
+                const toast = document.getElementById('login-toast');
+                if (!toast) return;
+
+                toast.classList.add('translate-x-full', 'opacity-0');
+                toast.classList.remove('translate-x-0', 'opacity-100');
+
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 300);
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const toast = document.getElementById('login-toast');
+                if (!toast) return;
+
+                // Trigger smooth entrance transition
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full', 'opacity-0');
+                    toast.classList.add('translate-x-0', 'opacity-100');
+                }, 100);
+
+                // Auto-dismiss after 4 seconds
+                setTimeout(() => dismissLoginToast(), 4000);
+            });
+        </script>
+
+        <% if (coinData && coinData.coins) { %>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const rawCoinsData = JSON.parse('<%- JSON.stringify(coinData && coinData.coins ? coinData.coins : []) %>');
+
+                rawCoinsData.forEach((coin, index) => {
+                    const canvas = document.getElementById(`sparkline-${index}`);
+                    if (!canvas || !coin.sparkline_in_7d || !coin.sparkline_in_7d.price) return;
+
+                    const prices = coin.sparkline_in_7d.price;
+                    const isPositive = (coin.price_change_percentage_7d_in_currency || 0) >= 0;
+                    const strokeColor = isPositive ? '#10b981' : '#ef4444';
+
+                    new Chart(canvas.getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: prices.map((_, i) => i),
+                            datasets: [{
+                                data: prices,
+                                borderColor: strokeColor,
+                                borderWidth: 1.5,
+                                pointRadius: 0,
+                                fill: false,
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                            scales: {
+                                x: { display: false },
+                                y: { display: false }
+                            }
+                        }
+                    });
+                });
+            </script>
+            <% } %>
+
+                <%- include('partials/footer') %>
+</body>
+
+</html>

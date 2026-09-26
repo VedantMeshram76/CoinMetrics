@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinMetrics | Ecosystem News</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#060608] bg-news-bg text-white ">
+
+    <%- include('partials/nav') -%>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-mono">
+        
+        <div class="flex items-center gap-2 mb-6">
+            <span class="text-xs uppercase tracking-wider font-semibold text-zinc-400">📰 Live Ecosystem News</span>
+            <span class="px-1.5 py-0.5 text-[10px] bg-amber-500/10 text-amber-500 rounded border border-amber-500/20 font-bold animate-pulse">LIVE</span>
+        </div>
+
+        <% if (cryptoNews && cryptoNews.length > 0) { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% cryptoNews.forEach(article => { %>
+                    <a href="<%= article.url %>" target="_blank" rel="noopener noreferrer"
+                        class="group block p-4 rounded-xl border border-[#27272a] bg-news-card transition-all duration-200 hover:shadow-[0_0_15px_rgba(18,211,150,0.15)] hover:border-emerald-500/30 flex flex-col justify-between">
+
+                        <div>
+                            <div class="w-full h-44 rounded-lg overflow-hidden bg-zinc-900 mb-3 relative">
+                                <img src="<%= article.imageUrl %>" alt="News Image"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-2 left-2 bg-black/80 text-zinc-400 text-[10px] px-2 py-0.5 rounded backdrop-blur-sm">
+                                    <%= article.time %>
+                                </span>
+                            </div>
+
+                            <div class="text-[10px] font-bold tracking-widest text-emerald-400 uppercase mb-1">
+                                <%= article.source %>
+                            </div>
+
+                            <h3 class="text-sm font-bold text-white leading-snug group-hover:text-emerald-400 transition-colors duration-150 line-clamp-2 mb-2">
+                                <%= article.title %>
+                            </h3>
+
+                            <p class="text-xs text-zinc-400 leading-relaxed line-clamp-3 mb-4">
+                                <%= article.body %>
+                            </p>
+                        </div>
+
+                        <div class="text-right text-[11px] text-zinc-500 font-bold tracking-wider group-hover:text-white transition-colors duration-150 pt-2 border-t border-zinc-900">
+                            READ ARTICLE ➔
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="p-12 text-center text-xs text-zinc-500 border border-dashed border-zinc-800 rounded-xl bg-news-card">
+                NO RECENT CRYPTO ECOSYSTEM NEWS RELEASES DISCOVERED WITHIN CURRENT TIME VECTORS.
+            </div>
+        <% } %>
+    </main>
+
+    <%- include('partials/footer') -%>
+</body>
+</html>

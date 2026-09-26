@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinMetrics | Analytics</title>
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#060608] text-white font-sans min-h-screen">
+
+    <%- include('partials/nav') -%>
+
+        <!-- Success Alert Banner -->
+        <% if (typeof success !=='undefined' && success) { %>
+            <div id="successAlert"
+                class="flex text-sm text-[#10b981] bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3 mb-6 items-center justify-between">
+                <span>Transaction added successfully!</span>
+                <button type="button" onclick="this.parentElement.remove()"
+                    class="text-[#8a8a93] hover:text-white">&times;</button>
+            </div>
+            <% } %>
+
+                <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+                    <!-- Section Title -->
+                    <div class="mb-6">
+                        <span class="text-sm font-semibold tracking-widest text-[#12d396]">[Market Analytics]</span>
+                    </div>
+
+                    <!-- Top Metrics Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+                        <!-- BTC Dominance Card -->
+                        <div
+                            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 transition-all duration-200 hover:shadow-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs uppercase tracking-widest font-semibold text-zinc-400">BTC Dominance
+                                </div>
+                                <div class="flex items-baseline gap-2 mt-2">
+                                    <span class="text-3xl font-extrabold tracking-tight text-white">
+                                        <%= btcDominance %>%
+                                    </span>
+                                    <span
+                                        class="text-xs font-semibold <%= btcChangeRaw >= 0 ? 'text-[#12d396]' : 'text-[#ff3b69]' %>">
+                                        <%= btcChange24h %>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <div class="w-full h-1.5 rounded-full overflow-hidden bg-zinc-800/60">
+                                    <div class="h-full rounded-full bg-[#12d396] shadow-[0_0_8px_rgba(18,211,150,0.5)] transition-all duration-500"
+                                        style="width: <%= btcDominance %>%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Market Cap Card -->
+                        <div
+                            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 transition-all duration-200 hover:shadow-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs uppercase tracking-widest font-semibold text-zinc-400">Total Market
+                                    Cap
+                                </div>
+                                <div class="flex items-baseline gap-2 mt-2">
+                                    <span class="text-3xl font-extrabold tracking-tight text-white">$<%= totalMarketCap
+                                            %>
+                                    </span>
+                                    <span
+                                        class="text-xs font-semibold <%= globalChangeRaw >= 0 ? 'text-[#12d396]' : 'text-[#ff3b69]' %>">
+                                        <%= globalChange24h %>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-6 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                                UPDATED SECONDS AGO
+                            </div>
+                        </div>
+
+                        <!-- 24h Volume Spectrum Card -->
+                        <div
+                            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 transition-all duration-200 hover:shadow-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="text-xs uppercase tracking-widest font-semibold text-zinc-400">24h Volume
+                                    Spectrum
+                                </div>
+                                <div class="flex items-baseline gap-2 mt-2">
+                                    <span class="text-3xl font-extrabold tracking-tight text-white">$<%= totalVolume %>
+                                    </span>
+                                    <span
+                                        class="text-xs font-semibold <%= volumeChangeRaw >= 0 ? 'text-[#12d396]' : 'text-[#ff3b69]' %>">
+                                        <%= totalVolumeChange %>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-6 text-[10px] font-bold uppercase tracking-wider text-[#12d396]">
+                                VOLUME INDEX: <%= volumeIndexStatus %>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Lower Section: Sentiment & Velocity Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                        <!-- Sentiment Analytics Card -->
+                        <div
+                            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 transition-all duration-200 hover:shadow-2xl flex flex-col justify-between items-center text-center">
+                            <div class="w-full text-left">
+                                <span
+                                    class="text-xs font-semibold uppercase tracking-widest text-zinc-400 flex items-center gap-1.5">
+                                    🔮 Sentiment Analytics
+                                </span>
+                            </div>
+
+                            <!-- Fixed Circle Gauge Container -->
+                            <div class="my-8 flex items-center justify-center w-full">
+                                <div
+                                    class="w-36 h-36 min-w-[144px] min-h-[144px] max-w-[144px] max-h-[144px] aspect-square shrink-0 rounded-full border-4 border-zinc-800/80 flex flex-col items-center justify-center shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+                                    <div class="text-4xl font-extrabold text-white leading-none">
+                                        <%= sentimentValue %>
+                                    </div>
+                                    <div class="text-[11px] font-bold uppercase tracking-widest text-[#12d396] mt-1.5">
+                                        <%= sentimentClassification %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-xs text-zinc-400 font-medium">
+                                INDEX MATRIX VALUE: <span class="text-white font-bold">
+                                    <%= sentimentValue %>/100
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Top 24h Velocity Movements Card -->
+                        <div
+                            class="lg:col-span-2 bg-[#0d0e12] border border-white/5 rounded-2xl p-6 transition-all duration-200 hover:shadow-2xl">
+                            <div
+                                class="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-6 flex items-center gap-1.5">
+                                🚀 Top 24h Velocity Movements
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                                <!-- Top Gainers Table -->
+                                <div>
+                                    <div
+                                        class="text-[11px] font-bold uppercase tracking-wider text-[#12d396] mb-3 flex items-center gap-1">
+                                        ▲ TOP GAINERS
+                                    </div>
+                                    <table class="w-full bg-transparent border-collapse">
+                                        <thead>
+                                            <tr class="border-b border-white/5">
+                                                <th
+                                                    class="pb-2 text-left font-semibold text-[10px] tracking-wider uppercase text-zinc-500">
+                                                    ASSET</th>
+                                                <th
+                                                    class="pb-2 text-right font-semibold text-[10px] tracking-wider uppercase text-zinc-500">
+                                                    VELOCITY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-white/5">
+                                            <% topGainers.forEach(coin=> { %>
+                                                <tr>
+                                                    <td class="py-3 text-sm font-bold text-white">
+                                                        <%= coin.name %> <span
+                                                                class="text-xs font-normal text-zinc-500 ml-1">
+                                                                <%= coin.symbol %>
+                                                            </span>
+                                                    </td>
+                                                    <td class="py-3 text-right text-xs font-bold text-[#12d396]">
+                                                        <%= coin.velocity %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Top Losers Table -->
+                                <div>
+                                    <div
+                                        class="text-[11px] font-bold uppercase tracking-wider text-[#ff3b69] mb-3 flex items-center gap-1">
+                                        ▼ TOP LOSERS
+                                    </div>
+                                    <table class="w-full bg-transparent border-collapse">
+                                        <thead>
+                                            <tr class="border-b border-white/5">
+                                                <th
+                                                    class="pb-2 text-left font-semibold text-[10px] tracking-wider uppercase text-zinc-500">
+                                                    ASSET</th>
+                                                <th
+                                                    class="pb-2 text-right font-semibold text-[10px] tracking-wider uppercase text-zinc-500">
+                                                    VELOCITY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-white/5">
+                                            <% topLosers.forEach(coin=> { %>
+                                                <tr>
+                                                    <td class="py-3 text-sm font-bold text-white">
+                                                        <%= coin.name %> <span
+                                                                class="text-xs font-normal text-zinc-500 ml-1">
+                                                                <%= coin.symbol %>
+                                                            </span>
+                                                    </td>
+                                                    <td class="py-3 text-right text-xs font-bold text-[#ff3b69]">
+                                                        <%= coin.velocity %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </main>
+
+                <%- include('partials/footer') -%>
+
+                    <script>
+                        // Automatically clear the query parameter from the URL bar without reloading
+                        if (window.location.search.includes('success=true')) {
+                            const newUrl = window.location.pathname;
+                            window.history.replaceState({}, document.title, newUrl);
+                        }
+                    </script>
+
+</body>
+
+</html>

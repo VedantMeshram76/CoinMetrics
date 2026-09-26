@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= coin.name %> (<%= coin.symbol %>) - CoinMetrics
+    </title>
+
+    <!-- Tailwind CSS CDN -->
+    <link rel="stylesheet" href="/css/output.css">
+    <!-- Chart.js for interactive line graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-[#07090e] text-gray-200 font-sans min-h-screen">
+
+   <%- include('partials/nav') %> 
+
+    <main class="max-w-7xl mx-auto p-4 md:p-8">
+
+        <div
+            class="flex flex-wrap items-center justify-between text-xs text-gray-400 mb-6 border-b border-gray-800/60 pb-4">
+            <div class="flex items-center space-x-2">
+                <a href="/users/market" class="hover:text-emerald-400">Markets</a>
+                <span>&gt;</span>
+                <span class="text-gray-100 font-medium">
+                    <%= coin.name %> Price
+                </span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>Market Cap: <span class="text-emerald-400 font-medium">
+                        <%= coin.marketCap %>
+                    </span></span>
+                <span>24h Vol: <span class="text-emerald-400 font-medium">
+                        <%= coin.volume24h %>
+                    </span></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <!-- ================= LEFT COLUMN: Token Info & Statistics ================= -->
+            <div class="lg:col-span-4 space-y-6">
+
+                <!-- Header & Price Card -->
+                <div class="bg-[#0e131b] border border-gray-800/80 rounded-2xl p-6 shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div
+                                class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 font-bold text-xl border border-amber-500/30">
+                                <%= coin.symbol.charAt(0) %>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <h1 class="text-2xl font-extrabold text-white">
+                                        <%= coin.name %>
+                                    </h1>
+                                    <span
+                                        class="text-xs uppercase bg-gray-800 text-gray-400 font-semibold px-2 py-0.5 rounded">
+                                        <%= coin.symbol %>
+                                    </span>
+                                    <span
+                                        class="text-xs bg-emerald-500/10 text-emerald-400 font-semibold px-2 py-0.5 rounded border border-emerald-500/20">
+                                        #<%= coin.rank %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                     
+                    </div>
+
+                    <!-- Price Display -->
+                    <div class="mt-4">
+                        <div class="flex items-baseline space-x-3">
+                            <span class="text-4xl font-extrabold tracking-tight text-white">
+                                <%= coin.price %>
+                            </span>
+                            <span
+                                class="flex items-center font-bold text-sm px-2.5 py-1 rounded-lg <%= coin.priceChange24h >= 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20' %>">
+                                <i data-lucide="<%= coin.priceChange24h >= 0 ? 'trending-up' : 'trending-down' %>"
+                                    class="w-4 h-4 mr-1"></i>
+                                <%= coin.priceChange24h %>%
+                            </span>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">1.0000 BTC • 0.0%</div>
+                    </div>
+
+                    <!-- 24h High / Low Bar -->
+                    <div class="mt-6 pt-4 border-t border-gray-800/60">
+                        <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>24h Range</span>
+                            <span class="text-gray-200">
+                                <%= coin.low24h %> - <%= coin.high24h %>
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full"
+                                style="width: 65%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Data Metrics -->
+                <div class="bg-[#0e131b] border border-gray-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+                    <h3
+                        class="text-sm font-semibold text-gray-300 uppercase tracking-wider border-b border-gray-800 pb-2">
+                        Market Data</h3>
+
+                    <div class="flex justify-between items-center text-sm py-1 border-b border-gray-800/40">
+                        <span class="text-gray-400">Market Cap</span>
+                        <span class="font-semibold text-gray-100">
+                            <%= coin.marketCap %>
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm py-1 border-b border-gray-800/40">
+                        <span class="text-gray-400">Fully Diluted Valuation</span>
+                        <span class="font-semibold text-gray-100">
+                            <%= coin.fdv %>
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm py-1 border-b border-gray-800/40">
+                        <span class="text-gray-400">24 Hour Trading Vol</span>
+                        <span class="font-semibold text-gray-100">
+                            <%= coin.volume24h %>
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm py-1 border-b border-gray-800/40">
+                        <span class="text-gray-400">Circulating Supply</span>
+                        <span class="font-semibold text-gray-100">
+                            <%= coin.circulatingSupply %>
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between items-center text-sm py-1">
+                        <span class="text-gray-400">Max Supply</span>
+                        <span class="font-semibold text-gray-100">
+                            <%= coin.maxSupply %>
+                        </span>
+                    </div>
+                </div>
+
+           
+            </div>
+
+           <!-- right column -->
+            <div class="lg:col-span-8 space-y-6">
+
+                <!-- Interactive Chart Card -->
+                <div class="bg-[#0e131b] border border-gray-800/80 rounded-2xl p-6 shadow-xl">
+                    <!-- Chart Header & Navigation -->
+                    <div
+                        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-gray-800/60 pb-4">
+
+                        <!-- Category Tabs -->
+                        <div
+                            class="flex space-x-1 bg-[#141a24] p-1 rounded-xl border border-gray-800 text-xs font-semibold">
+                            <button
+                                class="px-3.5 py-1.5 rounded-lg bg-emerald-500 text-black shadow-lg shadow-emerald-500/20">Overview</button>
+                      
+                        </div>
+
+                        <!-- Timeframe Selector -->
+                        <div
+                            class="flex space-x-1 bg-[#141a24] p-1 rounded-xl border border-gray-800 text-xs font-bold">
+                         
+                            <button
+                                class="px-2.5 py-1 rounded-lg bg-gray-800 text-emerald-400 border border-emerald-500/30">7D</button>
+                           
+                        </div>
+                    </div>
+
+                    <!-- Chart Canvas Container -->
+                    <div class="relative h-72 w-full">
+                        <!-- Set explicit height (e.g., h-72 or style="height: 300px;") -->
+                        <canvas id="coinChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- AI Prompts & Converter Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- AI Insights -->
+              
+
+                    <!-- Quick Converter -->
+                    <div class="bg-[#0e131b] border border-gray-800/80 rounded-2xl p-5 shadow-xl">
+                        <h3 class="text-sm font-semibold text-gray-300 mb-3">
+                            <%= coin.symbol %> Converter
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center bg-[#141a24] border border-gray-800 rounded-xl px-3 py-2">
+                                <input type="number" id="cryptoInput" value="1"
+                                    class="bg-transparent text-white font-bold text-sm outline-none w-full" />
+                                <span class="text-xs text-gray-400 font-semibold border-l border-gray-700 pl-2 ml-2">
+                                    <%= coin.symbol %>
+                                </span>
+                            </div>
+                            <div class="flex items-center bg-[#141a24] border border-gray-800 rounded-xl px-3 py-2">
+                                <input type="text" id="fiatOutput" readonly value="78909.00"
+                                    class="bg-transparent text-emerald-400 font-bold text-sm outline-none w-full" />
+                                <span
+                                    class="text-xs text-gray-400 font-semibold border-l border-gray-700 pl-2 ml-2">USD</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Token Description Box -->
+                <div class="bg-[#0e131b] border border-gray-800/80 rounded-2xl p-6 shadow-xl space-y-3">
+                    <h2 class="text-lg font-bold text-white">About <%= coin.name %> (<%= coin.symbol %>)</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        <%= coin.name %> is a decentralized digital currency designed to enable peer-to-peer transfers
+                            over a secure blockchain network. It provides transparent transaction records with a fixed
+                            supply cap.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Lucide Icons Setup -->
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <!-- Chart.js Graph Script -->
+    <script>
+    const canvas = document.getElementById('coinChart');
+    const ctx = canvas.getContext('2d');
+
+    // Safe extraction using EJS unescaped tag without spacing
+    const sparklinePrices = <%- JSON.stringify(coin && coin.sparkline ? coin.sparkline : []) %>;
+    const rawUnitPrice = Number('<%= coin && coin.rawPrice ? coin.rawPrice : 0 %>');
+    const priceChange24h = Number('<%= coin && coin.priceChange24h ? coin.priceChange24h : 0 %>');
+
+    // Dynamic color selection based on 24h performance
+    const isPositive = priceChange24h >= 0;
+    const strokeColor = isPositive ? '#10b981' : '#ef4444';
+    const fillStart = isPositive ? 'rgba(16, 185, 129, 0.35)' : 'rgba(239, 68, 68, 0.35)';
+    const fillEnd = isPositive ? 'rgba(16, 185, 129, 0.0)' : 'rgba(239, 68, 68, 0.0)';
+
+    // Gradient setup
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, fillStart);
+    gradient.addColorStop(1, fillEnd);
+
+    // Generate labels matching the sparkline array length
+    const labels = sparklinePrices.map((_, index) => index);
+
+    const crosshairPlugin = {
+    id: 'crosshair',
+    afterDraw: (chart) => {
+        if (chart.tooltip?._active && chart.tooltip._active.length) {
+            const activeElement = chart.tooltip._active[0];
+            const { ctx } = chart;
+            const x = activeElement.element.x;
+            const topY = chart.scales.y.top;
+            const bottomY = chart.scales.y.bottom;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.setLineDash([4, 4]); // Dashed line effect
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#10b981'; // Green dashed color
+            ctx.stroke();
+            ctx.restore();
+        }
+    }
+};
+
+   new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Price (USD)',
+            data: sparklinePrices,
+            borderColor: strokeColor,
+            borderWidth: 2,
+            fill: true,
+            backgroundColor: gradient,
+            tension: 0.2,
+
+            // Active Data Point Styling (matches image dot)
+            pointRadius: 0,                           // Hide points by default
+            pointHoverRadius: 6,                      // Solid center dot radius
+            pointHoverBackgroundColor: '#10b981',     // Solid inner dot color
+            pointHoverBorderColor: 'rgba(16, 185, 129, 0.3)', // Outer translucent halo
+            pointHoverBorderWidth: 6                 // Halo width
+        }]
+    },
+    plugins: [crosshairPlugin], // Register the crosshair plugin
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false // Triggers cursor effect anywhere along the X-axis
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                backgroundColor: '#ffffff',
+                titleColor: '#1f2937',
+                bodyColor: '#4b5563',
+                borderColor: '#e5e7eb',
+                borderWidth: 1,
+                padding: 12,
+                boxPadding: 4,
+                displayColors: false,
+                callbacks: {
+                    label: (context) => `Price: $${context.raw.toLocaleString(undefined, { minimumFractionDigits: 2 })}`
+                }
+            }
+        },
+        scales: {
+            x: { display: false },
+            y: {
+                grid: { color: 'rgba(31, 41, 55, 0.5)' },
+                ticks: {
+                    color: '#6b7280',
+                    font: { size: 11 },
+                    callback: (val) => `$${val.toLocaleString()}`
+                }
+            }
+        }
+    }
+});
+
+    // Dynamic Converter JS
+    const cryptoInput = document.getElementById('cryptoInput');
+    const fiatOutput = document.getElementById('fiatOutput');
+
+    if (cryptoInput && fiatOutput) {
+        // Set initial value dynamically on render
+        fiatOutput.value = rawUnitPrice.toFixed(2);
+
+        cryptoInput.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value) || 0;
+            fiatOutput.value = (val * rawUnitPrice).toFixed(2);
+        });
+    }
+</script>
+</body>
+<%- include('partials/footer') -%>
+</html>

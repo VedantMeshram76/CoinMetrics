@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .gauge-circle-fill {
+    border-top-color: #12d396;
+    border-right-color: #12d396;
+    filter: drop-shadow(0 0 4px #12d396);
+  }
+}

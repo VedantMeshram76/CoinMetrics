@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoinMetrics Terminal</title>
+  <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#000000] text-white mb-10 min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <!-- Background Image Layer -->
+  <div class="absolute inset-0 bg-cover bg-center opacity-25 pointer-events-none mix-blend-screen"
+    style="background-image: url('/frank_rietsch-bitcoin-8683839.jpg');">
+  </div>
+
+  <!-- Radial & Vertical Gradient Masks -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#000000_90%)] pointer-events-none"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-[#000000]/90 via-transparent to-[#000000]/90 pointer-events-none"></div>
+
+  <!-- Centered Navigation Bar -->
+  <nav class="bg-[#000000]/40 border-b border-white/[0.06] sticky top-0 z-50 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-center h-20 w-full">
+        <div class="flex items-center gap-3 mx-auto">
+          <div class="relative w-10 h-10 flex items-center justify-center bg-gradient-to-br from-emerald-400 via-teal-500 to-emerald-600 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] overflow-hidden">
+            <div class="absolute inset-[2px] bg-[#000000] rounded-[9px] flex items-center justify-center">
+              <svg class="w-5 h-5 text-emerald-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+          </div>
+          <span class="text-2xl font-black tracking-widest text-white">
+            COIN<span class="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">METRICS</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Content Area -->
+  <main class="relative z-10 flex-grow flex items-center justify-center px-4 pt-8 pb-8 ">
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+
+      <h1 class="text-3xl sm:text-4xl font-bold text-center">Welcome to CoinMetrics Terminal !</h1>
+
+      <p class="text-base sm:text-lg text-[#8a8a93] max-w-2xl mx-auto font-medium leading-relaxed px-2">
+        Track real-time market data, analyze your personal portfolio, and stay ahead with breaking crypto news. Get the
+        deep market knowledge you need to build your competitive edge.
+      </p>
+
+      <!-- Action Button -->
+      <div class="pt-4">
+        <a href="/users/register" class="inline-block bg-emerald-500 hover:bg-emerald-600 text-black font-bold py-3 px-8 rounded-full transition-colors shadow-lg shadow-emerald-500/20">
+          Let's Get Started
+        </a>
+      </div>
+
+      <!-- Login Link Block -->
+      <div class="pt-2 flex items-center justify-center gap-2 text-sm">
+        <span class="text-gray-400">Already have an account?</span>
+        <a href="/users/login" class="text-emerald-400 hover:text-emerald-300 font-bold underline-offset-4 hover:underline">
+          Log in
+        </a>
+      </div>
+
+      <!-- Features Section -->
+      <section class="space-y-4 pt-6 mb-10">
+        <h2 class="text-xl font-bold text-white text-center">What Sets The Terminal Apart</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+          <!-- Feature 1 -->
+          <div class="bg-[#0d0d11] border border-white/5 rounded-xl p-6 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+              📡
+            </div>
+            <h3 class="text-base font-semibold text-white">Live Price Tracking</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Monitor live prices across top cryptocurrencies with instant 1h, 24h, and 7d trend indicators and mini sparkline graphs.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-[#0d0d11] border border-white/5 rounded-xl p-6 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+              💼
+            </div>
+            <h3 class="text-base font-semibold text-white">Portfolio Insights</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Instantly see your best and worst-performing assets, compute total net worth, and manage transactions seamlessly.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-[#0d0d11] border border-white/5 rounded-xl p-6 space-y-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+              🎯
+            </div>
+            <h3 class="text-base font-semibold text-white">Asset Allocation</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Automatic percentage calculation gives you a precise breakdown of your portfolio risk across Bitcoin, Altcoins, and Stablecoins.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Dynamic Footer Partial -->
+  
+</body>
+
+
+<%- include('partials/footer') -%>
+
+</html>

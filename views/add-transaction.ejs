@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add transaction</title>
+    <link rel="stylesheet" href="/css/output.css">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-[#060608] text-white font-sans antialiased min-h-screen">
+    <%- include('Partials/nav') %>
+
+    <div class="max-w-2xl mx-auto my-10 px-4">
+
+        <!-- Back link -->
+        <a href="/users/portfolio" class="inline-flex items-center gap-1.5 text-sm text-[#8a8a93] hover:text-white transition-colors mb-6">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to portfolio
+        </a>
+
+        <div class="bg-[#0d0d11] border border-white/10 rounded-2xl p-8 md:p-10 shadow-2xl">
+
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-2xl font-bold">Add transaction</h1>
+            </div>
+
+            <form id="txForm" action="/users/transactions/<%= user?._id %>" method="POST">
+                <!-- Coin selector -->
+                <label class="block text-xs uppercase tracking-wider text-[#8a8a93] mb-2">Coin</label>
+                <div class="relative mb-6">
+                    <button type="button" id="coinSelectBtn" onclick="toggleCoinList()"
+                        class="w-full flex items-center gap-3 bg-[#060608] border border-white/10 rounded-xl px-4 py-4 text-left hover:border-white/20 transition-colors">
+                        <img id="selectedCoinImg" src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" alt="" class="w-8 h-8 rounded-full">
+                        <span id="selectedCoinName" class="text-base font-medium flex-1">Bitcoin</span>
+                        <span id="selectedCoinSymbol" class="text-sm text-[#8a8a93] uppercase">BTC</span>
+                        <svg class="w-5 h-5 text-[#8a8a93]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <input type="hidden" name="coinDataObject" id="coinDataObject" value="">
+
+                    <!-- Dropdown -->
+                    <div id="coinDropdown" class="hidden absolute z-10 mt-2 w-full bg-[#060608] border border-white/10 rounded-xl shadow-xl overflow-hidden">
+                        <input id="coinSearchInput" type="text" placeholder="Search coins..."
+                            class="w-full bg-transparent border-b border-white/10 px-4 py-3 text-sm outline-none placeholder:text-[#8a8a93]">
+                        <div id="coinList" class="max-h-64 overflow-y-auto"></div>
+                    </div>
+                </div>
+                <input type="hidden" id="coinSymbolField" name="symbol" value="BTC">
+
+                <!-- Buy/Sell toggle -->
+                <label class="block text-xs uppercase tracking-wider text-[#8a8a93] mb-2">Type</label>
+                <div class="flex gap-2 bg-[#060608] border border-white/10 rounded-xl p-1.5 mb-6">
+                    <input type="hidden" id="txTypeField" name="type" value="buy">
+                    <button type="button" id="buyBtn" onclick="setTxType('buy')"
+                        class="flex-1 py-3 rounded-lg text-sm font-semibold bg-[#10b981] text-[#060608] transition-colors">Buy</button>
+                    <button type="button" id="sellBtn" onclick="setTxType('sell')"
+                        class="flex-1 py-3 rounded-lg text-sm font-semibold text-[#8a8a93] transition-colors">Sell</button>
+                </div>
+
+                <!-- Amount + Price -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-[#8a8a93] mb-2">Amount</label>
+                        <div class="flex items-center bg-[#060608] border border-white/10 rounded-xl px-4 py-4">
+                            <input id="amountInput" name="amount" type="number" step="any" min="0" value="1" required
+                                class="bg-transparent border-none outline-none text-base w-full">
+                            <span id="amountUnit" class="text-sm text-[#8a8a93] uppercase">BTC</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-[#8a8a93] mb-2">Price / coin</label>
+                        <div class="flex items-center bg-[#060608] border border-white/10 rounded-xl px-4 py-4">
+                            <span class="text-sm text-[#8a8a93] mr-1.5">$</span>
+                            <input id="priceInput" name="price" type="number" step="any" min="0" value="61204" required
+                                class="bg-transparent border-none outline-none text-base w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <label class="block text-xs uppercase tracking-wider text-[#8a8a93] mb-2">Date</label>
+                <div class="flex items-center bg-[#060608] border border-white/10 rounded-xl px-4 py-4 mb-6">
+                    <input id="dateInput" name="date" type="date" required class="bg-transparent border-none outline-none text-base w-full [color-scheme:dark]">
+                </div>
+
+                <!-- Live total -->
+                <div class="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-5 py-5 mb-6">
+                    <span class="text-sm text-[#8a8a93]">Total</span>
+                    <span id="totalOut" class="text-2xl font-bold text-[#10b981]">$0.00</span>
+                </div>
+
+                <button type="submit" class="w-full bg-[#10b981] hover:bg-emerald-400 text-[#060608] rounded-xl py-4 text-base font-bold transition-colors">
+                    Add transaction
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.COINS = <%- JSON.stringify(coins) %>;
+    </script>
+
+    <script>
+        const COINS = window.COINS || [];
+        let coinDropdownOpen = false;
+
+        // Set default date to today
+        document.getElementById('dateInput').valueAsDate = new Date();
+
+        // Initialize default coin selection (Bitcoin or first item)
+        if (COINS.length > 0) {
+            selectCoin(COINS[0]);
+        }
+
+        function toggleCoinList() {
+            const dropdown = document.getElementById('coinDropdown');
+            coinDropdownOpen = !coinDropdownOpen;
+
+            if (coinDropdownOpen) {
+                dropdown.classList.remove('hidden');
+                renderCoinList(COINS);
+                const searchInput = document.getElementById('coinSearchInput');
+                searchInput.value = '';
+                searchInput.focus();
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        function renderCoinList(coins) {
+            const list = document.getElementById('coinList');
+            list.innerHTML = '';
+
+            if (coins.length === 0) {
+                list.innerHTML = `<div class="px-4 py-4 text-sm text-[#8a8a93] text-center">No coins found</div>`;
+                return;
+            }
+
+            coins.forEach(coin => {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.className = 'w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors text-left';
+                item.innerHTML = `
+                    <img src="${coin.image}" alt="" class="w-7 h-7 rounded-full" onerror="this.src='https://assets.coingecko.com/coins/images/1/large/bitcoin.png'">
+                    <span class="text-sm font-medium flex-1">${coin.name}</span>
+                    <span class="text-xs text-[#8a8a93] uppercase">${coin.symbol}</span>
+                `;
+                item.onclick = () => selectCoin(coin);
+                list.appendChild(item);
+            });
+        }
+
+        function selectCoin(coin) {
+            document.getElementById('selectedCoinImg').src = coin.image;
+            document.getElementById('selectedCoinName').textContent = coin.name;
+            document.getElementById('selectedCoinSymbol').textContent = coin.symbol.toUpperCase();
+            document.getElementById('coinSymbolField').value = coin.symbol.toUpperCase();
+            document.getElementById('amountUnit').textContent = coin.symbol.toUpperCase();
+            document.getElementById('coinDataObject').value = JSON.stringify(coin);
+
+            if (coin.current_price) {
+                document.getElementById('priceInput').value = coin.current_price;
+            }
+
+            document.getElementById('coinDropdown').classList.add('hidden');
+            coinDropdownOpen = false;
+
+            updateTotal();
+        }
+
+        document.getElementById('coinSearchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filtered = COINS.filter(c =>
+                c.name.toLowerCase().includes(query) || c.symbol.toLowerCase().includes(query)
+            );
+            renderCoinList(filtered);
+        });
+
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('coinDropdown');
+            const btn = document.getElementById('coinSelectBtn');
+            if (coinDropdownOpen && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                coinDropdownOpen = false;
+            }
+        });
+
+        function updateTotal() {
+            const amount = parseFloat(document.getElementById('amountInput').value) || 0;
+            const price = parseFloat(document.getElementById('priceInput').value) || 0;
+            const total = amount * price;
+            document.getElementById('totalOut').textContent = '$' + total.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Add event listeners to input fields to update total dynamically
+        document.getElementById('amountInput').addEventListener('input', updateTotal);
+        document.getElementById('priceInput').addEventListener('input', updateTotal);
+
+        function setTxType(type) {
+            document.getElementById('txTypeField').value = type;
+            const buyBtn = document.getElementById('buyBtn');
+            const sellBtn = document.getElementById('sellBtn');
+            if (type === 'buy') {
+                buyBtn.className = "flex-1 py-3 rounded-lg text-sm font-semibold bg-[#10b981] text-[#060608] transition-colors";
+                sellBtn.className = "flex-1 py-3 rounded-lg text-sm font-semibold text-[#8a8a93] transition-colors";
+            } else if (type === 'sell') {
+                buyBtn.className = "flex-1 py-3 rounded-lg text-sm font-semibold text-[#8a8a93] transition-colors";
+                sellBtn.className = "flex-1 py-3 rounded-lg text-sm font-semibold bg-[#ef4444] text-white transition-colors";
+            }
+        }
+
+        // --- SweetAlert Notification Handling ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isSuccess = urlParams.get('success');
+            const errorMessage = urlParams.get('error');
+
+            if (isSuccess === 'true') {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Transaction added successfully.',
+                    icon: 'success',
+                    background: '#0d0d11',
+                    color: '#ffffff',
+                    confirmButtonColor: '#10b981',
+                    customClass: { popup: 'border border-white/10 rounded-2xl' }
+                });
+                // Clean query string from browser URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (errorMessage) {
+                Swal.fire({
+                    title: 'Transaction Failed',
+                    text: decodeURIComponent(errorMessage),
+                    icon: 'error',
+                    background: '#0d0d11',
+                    color: '#ffffff',
+                    confirmButtonColor: '#ef4444',
+                    customClass: { popup: 'border border-white/10 rounded-2xl' }
+                });
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
+</body>
+<%- include('partials/footer') %>
+</html>

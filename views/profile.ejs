@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - CoinMetrics</title>
+    <!-- Tailwind CSS CDN -->
+    <link rel="stylesheet" href="/css/output.css">
+</head>
+
+<body class="bg-[#060608] text-white p-4 font-sans antialiased min-h-screen">
+    <div class="flex items-center space-x-2">
+        <span>&gt;</span>
+        <a href="/users/market" class="hover:text-emerald-400">Markets</a>
+    </div>
+
+    <div class="max-w-6xl mx-auto my-8 space-y-6">
+
+        <!-- 1. Profile Header Banner -->
+        <div
+            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-2xl">
+            <div class="flex items-center gap-5">
+                <!-- Letter Avatar with Edit Badge -->
+                <div class="relative shrink-0">
+                    <div
+                        class="w-20 h-20 rounded-2xl bg-[#10b981]/10 border-2 border-[#10b981]/30 flex items-center justify-center text-3xl font-extrabold text-[#10b981]">
+                        <%= user && user.username ? user.username.charAt(0).toUpperCase() : 'V' %>
+                    </div>
+
+                </div>
+
+                <!-- Profile Meta Details -->
+                <div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <h1 class="text-2xl font-extrabold text-white tracking-tight">
+                            <%= user && user.username ? user.username : 'Vedant Meshram' %>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Quick Buttons -->
+            <div class="flex items-center gap-2 self-start sm:self-center">
+                <button onclick="switchTab('security')"
+                    class="p-2 text-xs font-semibold rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 transition-all"
+                    title="Security Settings">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Navigation Tabs (Personal Info & Security) -->
+        <div class="border-b border-white/10 px-2 flex gap-6">
+            <button id="tab-btn-personal" onclick="switchTab('personal')"
+                class="flex items-center gap-2 py-3 px-2 border-b-2 border-[#10b981] text-[#10b981] font-medium text-sm transition-all focus:outline-none">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Personal Info
+            </button>
+            <button id="tab-btn-security" onclick="switchTab('security')"
+                class="flex items-center gap-2 py-3 px-2 border-b-2 border-transparent text-[#8a8a93] hover:text-white font-medium text-sm transition-all focus:outline-none">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Security & Password
+            </button>
+        </div>
+
+        <!-- 3. Personal Profile Information Tab -->
+        <div id="tab-content-personal"
+            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-white/5 pb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-white tracking-wide">Personal Profile Information</h2>
+                    <p class="text-xs text-[#8a8a93] mt-0.5">Manage your identity information and public trading profile
+                        details.</p>
+                </div>
+          
+            </div>
+
+            <form action="/users/profile/update" method="POST" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Full Name -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-gray-300">Full Name</label>
+                        <input type="text" name="fullName"
+                            value="<%= user && user.username ? user.username : 'Vedant Meshram' %>"
+                            class="w-full bg-[#060608] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#10b981] transition-colors">
+                    </div>
+
+
+
+
+                    <!-- Email Address -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-gray-300">Email Address</label>
+                        <input type="email" name="email"
+                            value="<%= user && user.email ? user.email : 'vedant.meshram@coinmetrics.io' %>"
+                            class="w-full bg-[#060608] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#10b981] transition-colors">
+                    </div>
+
+
+
+
+
+
+                </div>
+
+                <div class="pt-4 border-t border-white/5 flex items-center justify-end gap-4">
+                    <button type="submit"
+                        class="flex items-center gap-2 bg-[#10b981] hover:bg-[#0d9668] text-black text-xs font-bold py-3 px-6 rounded-xl shadow-lg shadow-[#10b981]/20 transition-all">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                        </svg>
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 4. Security & Password Tab (Hidden by Default) -->
+        <div id="tab-content-security"
+            class="bg-[#0d0e12] border border-white/5 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 hidden">
+            <div class="border-b border-white/5 pb-4">
+                <h2 class="text-lg font-bold text-white tracking-wide">Security & Password</h2>
+                <p class="text-xs text-[#8a8a93] mt-0.5">Manage your password, authentication preferences, and account
+                    security options.</p>
+            </div>
+
+            <!-- Password Change Form -->
+            <form action="/users/security/update-password" method="POST" class="space-y-6">
+                <div class="space-y-4 max-w-xl">
+                    <h3 class="text-sm font-semibold text-gray-200">Change Password</h3>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-gray-300">Current Password</label>
+                        <input type="password" name="currentPassword" placeholder="••••••••" required
+                            class="w-full bg-[#060608] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#10b981] transition-colors">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-gray-300">New Password</label>
+                        <input type="password" name="newPassword" placeholder="••••••••" required
+                            class="w-full bg-[#060608] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#10b981] transition-colors">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-gray-300">Confirm New Password</label>
+                        <input type="password" name="confirmPassword" placeholder="••••••••" required
+                            class="w-full bg-[#060608] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#10b981] transition-colors">
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/5 flex items-center justify-end gap-4">
+                    <button type="submit"
+                        class="flex items-center gap-2 bg-[#10b981] hover:bg-[#0d9668] text-black text-xs font-bold py-3 px-6 rounded-xl shadow-lg shadow-[#10b981]/20 transition-all">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        Update Security Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <%- include('partials/footer') %>
+
+        <script>
+            function switchTab(tab) {
+                const personalTab = document.getElementById('tab-content-personal');
+                const securityTab = document.getElementById('tab-content-security');
+                const personalBtn = document.getElementById('tab-btn-personal');
+                const securityBtn = document.getElementById('tab-btn-security');
+
+                if (tab === 'personal') {
+                    personalTab.classList.remove('hidden');
+                    securityTab.classList.add('hidden');
+
+                    personalBtn.className = "flex items-center gap-2 py-3 px-2 border-b-2 border-[#10b981] text-[#10b981] font-medium text-sm transition-all focus:outline-none";
+                    securityBtn.className = "flex items-center gap-2 py-3 px-2 border-b-2 border-transparent text-[#8a8a93] hover:text-white font-medium text-sm transition-all focus:outline-none";
+                } else if (tab === 'security') {
+                    securityTab.classList.remove('hidden');
+                    personalTab.classList.add('hidden');
+
+                    securityBtn.className = "flex items-center gap-2 py-3 px-2 border-b-2 border-[#10b981] text-[#10b981] font-medium text-sm transition-all focus:outline-none";
+                    personalBtn.className = "flex items-center gap-2 py-3 px-2 border-b-2 border-transparent text-[#8a8a93] hover:text-white font-medium text-sm transition-all focus:outline-none";
+                }
+            }
+        </script>
+</body>
+
+</html>
